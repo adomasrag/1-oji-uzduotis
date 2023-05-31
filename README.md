@@ -87,3 +87,30 @@ Galimos versijos:
 |Atsitiktinio failo testavimo laikas       | 0.192 | 0.215 | 2.113 | 16.597 | 136.190 | 
 
 Laikas duotas sekundėmis. Laikas suapvalintas iki trijų skaičių po kablelio.
+
+# V0.5
+
+## Programos aprašymas (pakeitimai nuo V0.4):
+
+- Programa parašyta su trijų tipų konteineriais, su std::vector, std::list ir std::deque.
+- Tikrinama, su kurio tipo konteineriais programa veiks sparčiausiai.
+
+|| Kont. tipas | 1 000  | 10 000 | 100 000 | 1 000 000 | 10 000 000 |
+| --- | --- | --- | --- | --- | --- | --- |
+| Nuskaitymas|Vector|0.004|0.032|0.31|3.16|31.10|
+||List|0.004|0.031|0.32|3.12|31.28|
+||Deque|0.004|0.032|0.32|3.14|34.01|
+| Rūšiavimas|Vector|0.000|0.001|0.01|0.12|1.12|
+||List|0.000|0.001|0.02|0.52|9.11|
+||Deque|0.000|0.002|0.02|0.31|4.06|
+| Skirstymas|Vector|0.000|0.002|0.02|0.26|3.08|
+||List|0.000|0.002|0.03|0.26|2.85|
+||Deque|0.000|0.002|0.02|0.29|3.45|
+
+Laikas duotas sekundėmis. Laikas buvo apvalinamas iki trijų skaičių po kablelio.
+
+## Testavimo sistemos parametrai:
+CPU: Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz (2 branduoliai (4 loginiai))
+RAM: 8 GB
+SSD: 256 GB MICRON 1100 MTFDDAV256TBN
+
