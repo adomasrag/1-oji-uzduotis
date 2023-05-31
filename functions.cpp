@@ -12,6 +12,10 @@ bool ArPazymys(int pazymys) {
     return pazymys >= 1 && pazymys <= 10;
 }
 
+bool PalygintiPavarde(const Studentas& x, const Studentas& y) {
+    return x.pavarde < y.pavarde;
+}
+
 float Vidurkis(const vector<int>& pazymiai) {
     int suma = 0;
     for (int pazymys : pazymiai) {
@@ -30,183 +34,86 @@ float Mediana(vector<int> pazymiai) {
     }
 }
 
-float Galutinis(int egzaminas, float vidurkis, bool ArMediana) {
+float Galutinis(int egzaminas, float budas, bool ArMediana) {
     if (ArMediana) {
-        return 0.6 * egzaminas + 0.4 * vidurkis;
+        return 0.6 * egzaminas + 0.4 * budas;
     } else {
-        return 0.6 * egzaminas + 0.4 * vidurkis;
+        return 0.6 * egzaminas + 0.4 * budas;
     }
 }
 
-void IvestisRanka(vector<Studentas>& studentai, const string& stop) {
-    string vardas, pavarde;
-    int pazymys;
+void RikiuotiStudentus(vector<Studentas>& studentai, const string& vargsiukaiFailas, const string& kietiakiaiFailas, int kiekispaz) {
+    vector<Studentas> vargsiukai;
+    vector<Studentas> kietiakiai;
 
-    while (true) {
-        cout << "Iveskite studento varda (arba 'STOP' jei norite baigti ivedima): ";
-        getline(cin, vardas);
+    std::chrono::steady_clock::time_point sortBegin = std::chrono::steady_clock::now();
 
-        if (vardas == stop)
-            break;
-
-        cout << "Iveskite studento pavarde: ";
-        getline(cin, pavarde);
-
-        Studentas studentas;
-        studentas.vardas = vardas;
-        studentas.pavarde = pavarde;
-
-        while (true) {
-            cout << "Iveskite pazymi (arba 'STOP' jei norite baigti pazymiu ivedima siam studentui): ";
-            string ivestis;
-            getline(cin, ivestis);
-
-            if (ivestis == stop)
-                break;
-
-            try {
-                pazymys = stoi(ivestis);
-                if (ArPazymys(pazymys))
-                    studentas.pazymiai.push_back(pazymys);
-                else
-                    throw runtime_error("Klaida: Klaidingas pazymys. Prasome ivesti pazymi nuo 1 iki 10.");
-            } catch (const exception& e) {
-                cout << "Klaida: " << e.what() << ". Iveskite pazymi." << endl;
-                continue;
-            }
-        }
-
-        cout << "Iveskite egzamino rezultata siam studentui: ";
-        while (true) {
-            string ivestis;
-            getline(cin, ivestis);
-
-            try {
-                pazymys = stoi(ivestis);
-                if (ArPazymys(pazymys)) {
-                    studentas.egzaminas = pazymys;
-                    break;
-                } else {
-                    throw runtime_error("Klaida: Klaidingas pazymys. Prasome ivesti pazymi nuo 1 iki 10.");
-                }
-            } catch (const exception& e) {
-                cout << "Klaida: " << e.what() << ". Iveskite pazymi." << endl;
-            }
-        }
-
-        studentai.push_back(studentas);
-        cout << endl;
-    }
-}
-
-void IvestisAtsitiktinai(vector<Studentas>& studentai) {
-    string vardas, pavarde;
-    int pazymys;
-
-    cout << "Iveskite studentu skaiciu: ";
-    int studentuSkaicius;
-
-    while (true) {
-        string ivestis;
-        getline(cin, ivestis);
-
-        try {
-            studentuSkaicius = stoi(ivestis);
-            break;
-        } catch (const exception& e) {
-            cout << "Klaida: " << e.what() << ". Iveskite studentu skaiciu." << endl;
-        }
-    }
-
-    for (int i = 0; i < studentuSkaicius; ++i) {
-        Studentas studentas;
-
-        cout << "Iveskite studento varda: ";
-        getline(cin, vardas);
-        studentas.vardas = vardas;
-
-        cout << "Iveskite studento pavarde: ";
-        getline(cin, pavarde);
-        studentas.pavarde = pavarde;
-
-        cout << "Iveskite namu darbu skaiciu siam studentui: ";
-        int pazymiuSkaicius;
-
-        while (true) {
-            string ivestis;
-            getline(cin, ivestis);
-
-            try {
-                pazymiuSkaicius = stoi(ivestis);
-                break;
-            } catch (const exception& e) {
-                cout << "Klaida: " << e.what() << ". Iveskite namu darbu skaiciu." << endl;
-            }
-        }
-
-
-        cout << "Atsitiktinai sugeneruoti pazymiai: ";
-        for (int j = 0; j < pazymiuSkaicius; ++j) {
-            pazymys = RandomPazymiai();
-            studentas.pazymiai.push_back(pazymys);
-            cout << pazymys << " ";
-        }
-        cout << endl;
-
-        studentas.egzaminas = RandomPazymiai();
-        cout << "Atsitiktinai sugeneruotas egzamino rezultatas: " << studentas.egzaminas << endl;
-
-        studentai.push_back(studentas);
-        cout << endl;
-    }
-}
-
-void IvestisIsFailo(std::vector<Studentas>& studentai) {
-    std::string failoPavadinimas;
-
-    while (true) {
-        std::cout << "Iveskite failo pavadinima: ";
-        std::getline(std::cin, failoPavadinimas);
-
-        std::ifstream failas(failoPavadinimas);
-        if (failas.is_open()) {
-            std::string eilute;
-            std::getline(failas, eilute);
-
-            while (std::getline(failas, eilute)) {
-            std::istringstream iss(eilute);
-
-            Studentas studentas;
-            iss >> studentas.vardas >> studentas.pavarde;
-
-            int pazymys;
-            while (iss >> pazymys) {
-                if (ArPazymys(pazymys))
-                    studentas.pazymiai.push_back(pazymys);
-                else
-                    std::cout << "Klaidingas pazymys. Prasome ivesti pazymi nuo 1 iki 10." << std::endl;
-            }
-
-            if (studentas.pazymiai.empty()) {
-                std::cout << "Nera pazymiu studentui: " << studentas.pavarde << " " << studentas.vardas << std::endl;
-                continue;
-            }
-
-            studentas.egzaminas = studentas.pazymiai.back(); // Last number in the row is the exam score
-            studentas.pazymiai.pop_back();
-            studentai.push_back(studentas);
-        }
-
-        failas.close();
-            break;
+    for (const auto& studentas : studentai) {
+        if (Galutinis(studentas.egzaminas, Vidurkis(studentas.pazymiai), false) < 5.0) {
+            vargsiukai.push_back(studentas);
         } else {
-            std::cout << "Klaida: Nepavyko atidaryti failo. Patikrinkite, ar failas egzistuoja." << std::endl;
+            kietiakiai.push_back(studentas);
         }
     }
-}
 
-bool PalygintiPavarde(const Studentas& x, const Studentas& y) {
-    return x.pavarde < y.pavarde;
+    studentai.clear();
+
+    std::chrono::steady_clock::time_point sortEnd = std::chrono::steady_clock::now();
+        cout << "Failo rikiavimo i dvi grupes su pradinio vektoriaus istrinimu laikas: " << fixed << setprecision(6)
+                  << std::chrono::duration_cast<std::chrono::duration<double>>(sortEnd - sortBegin).count()
+                  << " sekundes." << endl;
+
+
+    std::chrono::steady_clock::time_point asertBegin = std::chrono::steady_clock::now();
+
+    ofstream vargsiukaiStream(vargsiukaiFailas);
+    ofstream kietiakiaiStream(kietiakiaiFailas);
+
+    if (vargsiukaiStream.is_open() && kietiakiaiStream.is_open()) {
+        vargsiukaiStream << setw(25) << left << setprecision(2) << "Vardas";
+        vargsiukaiStream << setw(25) << left << setprecision(2) << "Pavarde";
+
+        for (int j = 1; j <= kiekispaz; ++j) {
+            vargsiukaiStream << "ND" << j << "       ";
+        }
+            vargsiukaiStream << "Egz.\n";
+        for (const auto& studentas : vargsiukai) {
+            vargsiukaiStream << setw(25) << left << studentas.vardas;
+            vargsiukaiStream << setw(25) << left << studentas.pavarde;
+
+                for (const auto& pazymys : studentas.pazymiai) {
+                    vargsiukaiStream << setw(10) << left << pazymys;
+                }
+            vargsiukaiStream << setw(10) << left << studentas.egzaminas << endl;
+        }
+
+        kietiakiaiStream << setw(25) << left << setprecision(2) << "Vardas";
+        kietiakiaiStream << setw(25) << left << setprecision(2) << "Pavarde";
+
+        for (int k = 1; k <= kiekispaz; ++k) {
+            kietiakiaiStream << "ND" << k << "       ";
+        }
+            kietiakiaiStream << "Egz.\n";
+        for (const auto& studentas : kietiakiai) {
+            kietiakiaiStream << setw(25) << left << studentas.vardas;
+            kietiakiaiStream << setw(25) << left << studentas.pavarde;
+
+                for (const auto& pazymys : studentas.pazymiai) {
+                    kietiakiaiStream << setw(10) << left << pazymys;
+                }
+            kietiakiaiStream << setw(10) << left << studentas.egzaminas << endl;
+        }
+
+        vargsiukaiStream.close();
+        kietiakiaiStream.close();
+        std::chrono::steady_clock::time_point asertEnd = std::chrono::steady_clock::now();
+            cout << "Surikiuotu studentu isvedimo i failus laikas: " << fixed << setprecision(6)
+                      << std::chrono::duration_cast<std::chrono::duration<double>>(asertEnd - asertBegin).count()
+                      << " sekundes." << endl;
+
+    } else {
+        cout << "Klaida: Nepavyko atidaryti failu " << vargsiukaiFailas << " ir " << kietiakiaiFailas << endl;
+    }
 }
 
 void Isvedimas(const vector<Studentas>& studentai, bool ArMediana) {
@@ -221,13 +128,13 @@ void Isvedimas(const vector<Studentas>& studentai, bool ArMediana) {
     vector<Studentas> sortedStudentai = studentai;
     sort(sortedStudentai.begin(), sortedStudentai.end(), PalygintiPavarde);
     for (const auto& studentas : sortedStudentai) {
-        float vidurkis;
+        float budas;
         if (ArMediana) {
-            vidurkis = Mediana(studentas.pazymiai);
+            budas = Mediana(studentas.pazymiai);
         } else {
-            vidurkis = Vidurkis(studentas.pazymiai);
+            budas = Vidurkis(studentas.pazymiai);
         }
-        float galutinis = Galutinis(studentas.egzaminas, vidurkis, ArMediana);
+        float galutinis = Galutinis(studentas.egzaminas, budas, ArMediana);
 
         cout << left << setw(15) << studentas.pavarde << "\t" << setw(15) << studentas.vardas;
         cout << fixed << setprecision(2) << galutinis << endl;
