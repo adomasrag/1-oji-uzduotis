@@ -111,6 +111,8 @@ Laikas duotas sekundėmis. Laikas buvo apvalinamas iki trijų skaičių po kable
 
 ## Testavimo sistemos parametrai:
 CPU: Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz (2 branduoliai (4 loginiai))
+
 RAM: 8 GB
+
 SSD: 256 GB MICRON 1100 MTFDDAV256TBN
 
