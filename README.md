@@ -98,14 +98,14 @@ Laikas duotas sekundėmis. Laikas suapvalintas iki trijų skaičių po kablelio.
 || Kont. tipas | 1 000  | 10 000 | 100 000 | 1 000 000 | 10 000 000 |
 | --- | --- | --- | --- | --- | --- | --- |
 | Nuskaitymas|Vector|0.004|0.032|0.31|3.16|31.10|
-||List|0.004|0.031|0.32|3.12|31.28|
-||Deque|0.004|0.032|0.32|3.14|34.01|
+||List|0.003|0.051|0.331|3.731|24.838|
+||Deque|0.005|0.050|0.471|3.851|34.296|
 | Rūšiavimas|Vector|0.000|0.001|0.01|0.12|1.12|
 ||List|0.000|0.001|0.02|0.52|9.11|
-||Deque|0.000|0.002|0.02|0.31|4.06|
+||Deque|0.003|0.032|0.505|5.631|69.831|
 | Skirstymas|Vector|0.000|0.002|0.02|0.26|3.08|
 ||List|0.000|0.002|0.03|0.26|2.85|
-||Deque|0.000|0.002|0.02|0.29|3.45|
+||Deque|0.000|0.007|0.077|0.488|5.840|
 
 Laikas duotas sekundėmis. Laikas buvo apvalinamas iki trijų skaičių po kablelio.
 
@@ -116,3 +116,28 @@ RAM: 8 GB
 
 SSD: 256 GB MICRON 1100 MTFDDAV256TBN
 
+
+# V1.0
+
+## Programos aprašymas (pakeitimai nuo V0.5):
+
+ - Optimizuota studentų rūšiavimo (dalijimo) į dvi kategorijas ("vargsiuku" ir "kietiakiu") realizaciją: t.y. visiems trims konteinerių tipams (vector, list ir deque) išmatuota veikimo sparta priklausomai nuo studentų dalijimo į dvi kategorijas strategijos:
+
+ - 1 strategija: Bendro studentai konteinerio (vector, list ir deque tipų)
+skaidymas (rūšiavimas) į du naujus to paties tipo konteinerius:
+
+ - 2 strategija: Bendro studentų konteinerio (vector, list ir deque) skaidymas (rūšiavimas)
+panaudojant tik vieną naują konteinerį: "vargsiukai".
+
+Gauti rezultatai:
+
+| Kont. tipas | Strategija | 1 000  | 10 000 | 100 000 | 1 000 000 | 10 000 000 |
+|--- | --- | --- | --- | --- | --- | --- |
+|Vector|1 str.|0.000|0.005|0.074|0.512|5.375|
+||2 str.|0.000|0.010|0.070|0.707|7.916|
+|List|1 str.|0.001|0.008|0.079|0.666|8.400|
+||2 str.|0.001|0.009|0.104|0.819|9.312|
+|Deque|1 str.|0.000|0.005|0.055|0.416|4.751|
+||2 str.|0.000|0.010|0.077|0.768|10.472|
+
+Laikas duotas sekundėmis. Laikas buvo apvalinamas iki trijų skaičių po kablelio.
